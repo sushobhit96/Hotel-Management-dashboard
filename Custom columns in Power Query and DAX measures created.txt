@@ -1,0 +1,32 @@
+Custom Columns In Power Query
+= Table.AddColumn(#"Inserted Day Name", "Day of Week", each Date.DayOfWeek([Stay Date]), Int64.Type)
+
+
+= Table.AddColumn(#"Renamed Columns1", "How far away bucket", each if [#"How far away?"] <= 7 then "1. Before a week" else if [#"How far away?"] <= 14 then "2. Before 2 weeks" else if [#"How far away?"] <= 28 then "3. Before 4 weeks" else "4. More than 4 weeks")
+
+
+Dax measures to be created
+
+Booking count
+avg room rate
+cancellation count
+cancellation pct
+loyal customer booking count
+multi night booking count
+not loyal customer booking count
+single night booking count
+total revenue
+total room nights
+
+DAX measures
+
+Total Room Nights = SUM(bookings[Number of nights])
+Total Room Nights = SUM(bookings[Number of nights])
+Single night booking count = CALCULATE([Booking Count], bookings[Number of nights]=1)
+Not Loyal Customer Booking Count = CALCULATE([Booking Count], bookings[Loyalty Level]="0.Non-member")
+Multi-night booking count = CALCULATE([Booking Count], bookings[Number of nights]>1)
+Loyal Customer Booking Count = CALCULATE([Booking Count], bookings[Loyalty Level]<>"0.Non-member")
+Cancellation Pct = DIVIDE([Cancellation Count], [Booking Count])
+Cancellation Count = CALCULATE([Booking Count], bookings[Status] = "Cancelled")
+Booking Count = COUNTROWS(bookings)
+Avg. Room Rate = DIVIDE([Total Revenue], [Total Room Nights])
